@@ -1,9 +1,19 @@
 <template>
-  <li>
+  <li class="flex gap-1 item-center mb-2">
     <input type="checkbox" v-model="props.done" />
     <span :class="{ done: props.done }">{{ props.text }}</span>
-    <button @click="$emit('remove-todo')" class="btn-del">x</button>
-    <button @click="$emit('update-todo')" class="btn-del">U</button>
+    <button
+      @click="$emit('remove-todo')"
+      class="bg-red-700 text-white p-2 rounded-md"
+    >
+      x
+    </button>
+    <button
+      @click="$emit('update-todo')"
+      class="bg-blue-700 text-white p-2 rounded-md"
+    >
+      U
+    </button>
   </li>
 </template>
 

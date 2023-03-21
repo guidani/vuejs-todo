@@ -48,9 +48,16 @@ const updateTodo = (index: number, todo: string) => {
   <div class="todo-list">
     <h2>{{ title }}</h2>
     <span>Criado com ajuda do ChatGPT</span>
-    <form @submit.prevent="addTodo">
-      <input type="text" v-model="newTodo" placeholder="Add a new todo..." />
-      <button type="submit">Add</button>
+    <form @submit.prevent="addTodo" class="flex gap-2">
+      <input
+        type="text"
+        v-model="newTodo"
+        placeholder="Add a new todo..."
+        class="outline-1 outline-slate-900 border pl-2 py-2"
+      />
+      <button type="submit" class="bg-green-700 p-2 rounded-md text-white">
+        Add
+      </button>
     </form>
     <p v-if="store.todos.length === 0">Adicione uma tarefa para continuar!</p>
     <button
@@ -62,7 +69,7 @@ const updateTodo = (index: number, todo: string) => {
     </button>
     <ul>
       <ListItem
-        v-for="todo, index in filteredTodos"
+        v-for="(todo, index) in filteredTodos"
         :done="todo.done"
         :index="index"
         :text="todo.text"
@@ -82,23 +89,6 @@ const updateTodo = (index: number, todo: string) => {
 
 h2 {
   font-size: 2rem;
-}
-
-form {
-  display: flex;
-  gap: 1rem;
-}
-
-ul {
-  list-style: none;
-  padding-left: 0;
-}
-
-li {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-  margin-bottom: 10px;
 }
 
 .btn-del {
