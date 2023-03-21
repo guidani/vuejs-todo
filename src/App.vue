@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { computed, ref, watch } from "vue";
+import ListItem from "./components/ListItem.vue";
 import { store } from "./stores/store";
 
 const title = ref("Lista de tarefas");
@@ -60,16 +61,14 @@ const updateTodo = (index: number, todo: string) => {
       {{ hideCompleted ? "Exibir todos" : "Ocultar completos" }}
     </button>
     <ul>
-      <TransitionGroup name="list" tag="ul">
-        <li v-for="(todo, index) in filteredTodos" :key="index">
-          <input type="checkbox" v-model="todo.done" />
-          <span :class="{ done: todo.done }">{{ todo.text }}</span>
-          <button @click="store.remove(index)" class="btn-del">x</button>
-          <button @click="updateTodo(index, todo.text)" class="btn-del">
-            U
-          </button>
-        </li>
-      </TransitionGroup>
+      <ListItem
+        v-for="todo, index in filteredTodos"
+        :done="todo.done"
+        :index="index"
+        :text="todo.text"
+        @remove-todo="store.remove(index)"
+        @update-todo="updateTodo(index, todo.text)"
+      />
     </ul>
   </div>
 </template>
