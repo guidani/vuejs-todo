@@ -1,14 +1,9 @@
 <script lang="ts" setup>
 import { computed, ref, watch } from "vue";
-
-interface Todo {
-  done: boolean;
-  text: string;
-}
+import { store } from "./stores/store";
 
 const title = ref("Lista de tarefas");
 
-const todos = ref<Todo[]>([]);
 const newTodo = ref<string>("");
 
 const hideCompleted = ref(false);
@@ -16,18 +11,20 @@ const hideCompleted = ref(false);
 // Load todos from localStorage
 const savedTodos = localStorage.getItem("todos");
 if (savedTodos) {
-  todos.value = JSON.parse(savedTodos);
+  store.todos = JSON.parse(savedTodos);
 }
 
 const filteredTodos = computed(() => {
-  return hideCompleted.value ? todos.value.filter((t) => !t.done) : todos.value;
+  return hideCompleted.value
+    ? store.todos.filter((t: { done: boolean }) => !t.done)
+    : store.todos;
 });
 
 // Watch for changes to todos and save to localStorage
 watch(
-  todos,
+  store.todos,
   () => {
-    localStorage.setItem("todos", JSON.stringify(todos.value));
+    localStorage.setItem("todos", JSON.stringify(store.todos));
   },
   { deep: true }
 );
@@ -35,21 +32,14 @@ watch(
 const addTodo = () => {
   const text = newTodo.value.trim();
   if (text) {
-    todos.value.push({
-      text,
-      done: false,
-    });
+    store.add(text);
     newTodo.value = "";
   }
 };
 
-const removeTodo = (index: number) => {
-  todos.value.splice(index, 1);
-};
-
 const updateTodo = (index: number, todo: string) => {
   newTodo.value = todo;
-  removeTodo(index);
+  store.remove(index);
 };
 </script>
 
@@ -61,10 +51,10 @@ const updateTodo = (index: number, todo: string) => {
       <input type="text" v-model="newTodo" placeholder="Add a new todo..." />
       <button type="submit">Add</button>
     </form>
-    <p v-if="todos.length === 0">Adicione uma tarefa para continuar!</p>
+    <p v-if="store.todos.length === 0">Adicione uma tarefa para continuar!</p>
     <button
       @click="hideCompleted = !hideCompleted"
-      v-if="todos.length !== 0"
+      v-if="store.todos.length !== 0"
       class="toggle"
     >
       {{ hideCompleted ? "Exibir todos" : "Ocultar completos" }}
@@ -74,7 +64,7 @@ const updateTodo = (index: number, todo: string) => {
         <li v-for="(todo, index) in filteredTodos" :key="index">
           <input type="checkbox" v-model="todo.done" />
           <span :class="{ done: todo.done }">{{ todo.text }}</span>
-          <button @click="removeTodo(index)" class="btn-del">x</button>
+          <button @click="store.remove(index)" class="btn-del">x</button>
           <button @click="updateTodo(index, todo.text)" class="btn-del">
             U
           </button>
