@@ -1,7 +1,15 @@
 <template>
-  <li class="flex gap-1 item-center mb-2">
-    <input type="checkbox" v-model="props.done" />
-    <span :class="{ done: props.done }">{{ props.text }}</span>
+  <li
+    class="flex gap-1 items-center mb-2 flex-1 border-b-2 border-slate-600 pb-2"
+  >
+    <input
+      type="checkbox"
+      v-model="props.done"
+      class="checked:accent-green-600 bg-gray-600"
+    />
+    <span :class="[{ 'done': props.done }, 'flex-1']">{{
+      props.text
+    }}</span>
     <button
       @click="$emit('remove-todo')"
       class="bg-red-700 text-white p-2 rounded-md"
@@ -26,8 +34,11 @@ interface Props {
   text: String;
   index: Number;
 }
-
 const props = defineProps<Props>();
 </script>
 
-<style scoped></style>
+<style scoped>
+.done{
+  text-decoration-line: line-through;
+}
+</style>

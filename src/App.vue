@@ -1,10 +1,11 @@
 <script lang="ts" setup>
-import { computed, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
+import AddIcon from "./components/AddIcon.vue";
 import ListItem from "./components/ListItem.vue";
 import { store } from "./stores/store";
-import AddIcon from './components/AddIcon.vue';
 
 const title = ref("Lista de tarefas");
+const myInput = ref();
 
 const hideCompleted = ref(false);
 
@@ -22,19 +23,22 @@ const filteredTodos = computed(() => {
 
 // Watch for changes to todos and save to localStorage
 watch(
-  () => store.todos,
+  store.todos,
   () => {
     localStorage.setItem("todos", JSON.stringify(store.todos));
   },
   { deep: true }
 );
+
+onMounted(() => {
+  myInput.value.focus();
+});
 </script>
 
 <template>
   <div class="container mx-auto">
     <div class="flex flex-col gap-2">
       <div class="flex justify-between">
-
         <h2 class="text-2xl">{{ title }}</h2>
         <p>Criado com ajuda do ChatGPT</p>
       </div>
@@ -44,9 +48,13 @@ watch(
           v-model="store.newTodo"
           placeholder="Add a new todo..."
           class="outline-1 outline-slate-900 border pl-2 py-2 flex-1"
+          ref="myInput"
         />
-        <button type="submit" class="bg-green-700 p-2 rounded-md text-white">
-           <AddIcon/>
+        <button
+          type="submit"
+          class="bg-green-700 w-20 text-center rounded-md text-white text-6xl flex justify-center items-center"
+        >
+          <AddIcon />
         </button>
       </form>
       <p v-if="store.todos.length === 0">Adicione uma tarefa para continuar!</p>
@@ -72,29 +80,6 @@ watch(
 </template>
 
 <style scoped>
-/* .todo-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-} */
-
-.btn-del {
-  background-color: red;
-  text-transform: capitalize;
-}
-
-span {
-  margin-left: 10px;
-}
-
-.done {
-  text-decoration: line-through;
-}
-
-input[type="checkbox"] {
-  margin-right: 10px;
-}
-
 .list-enter-active,
 .list-leave-active {
   transition: all 0.1s ease;
