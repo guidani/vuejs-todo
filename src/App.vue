@@ -2,6 +2,7 @@
 import { computed, ref, watch } from "vue";
 import ListItem from "./components/ListItem.vue";
 import { store } from "./stores/store";
+import AddIcon from './components/AddIcon.vue';
 
 const title = ref("Lista de tarefas");
 
@@ -27,59 +28,55 @@ watch(
   },
   { deep: true }
 );
-
-// const updateTodo = (index: number, todo: string) => {
-//   store.newTodo = todo;
-//   store.remove(index);
-// };
 </script>
 
 <template>
-  <div class="todo-list">
-    <h2>{{ title }}</h2>
-    <span>Criado com ajuda do ChatGPT</span>
-    <form @submit.prevent="store.add()" class="flex gap-2">
-      <input
-        type="text"
-        v-model="store.newTodo"
-        placeholder="Add a new todo..."
-        class="outline-1 outline-slate-900 border pl-2 py-2"
-      />
-      <button type="submit" class="bg-green-700 p-2 rounded-md text-white">
-        Add
+  <div class="container mx-auto">
+    <div class="flex flex-col gap-2">
+      <div class="flex justify-between">
+
+        <h2 class="text-2xl">{{ title }}</h2>
+        <p>Criado com ajuda do ChatGPT</p>
+      </div>
+      <form @submit.prevent="store.add()" class="flex gap-2">
+        <input
+          type="text"
+          v-model="store.newTodo"
+          placeholder="Add a new todo..."
+          class="outline-1 outline-slate-900 border pl-2 py-2 flex-1"
+        />
+        <button type="submit" class="bg-green-700 p-2 rounded-md text-white">
+           <AddIcon/>
+        </button>
+      </form>
+      <p v-if="store.todos.length === 0">Adicione uma tarefa para continuar!</p>
+      <button
+        @click="hideCompleted = !hideCompleted"
+        v-if="store.todos.length !== 0"
+        class="toggle"
+      >
+        {{ hideCompleted ? "Exibir todos" : "Ocultar completos" }}
       </button>
-    </form>
-    <p v-if="store.todos.length === 0">Adicione uma tarefa para continuar!</p>
-    <button
-      @click="hideCompleted = !hideCompleted"
-      v-if="store.todos.length !== 0"
-      class="toggle"
-    >
-      {{ hideCompleted ? "Exibir todos" : "Ocultar completos" }}
-    </button>
-    <ul>
-      <ListItem
-        v-for="(todo, index) in filteredTodos"
-        :done="todo.done"
-        :index="index"
-        :text="todo.text"
-        @remove-todo="store.remove(index)"
-        @update-todo="store.update(index, todo.text)"
-      />
-    </ul>
+      <ul>
+        <ListItem
+          v-for="(todo, index) in filteredTodos"
+          :done="todo.done"
+          :index="index"
+          :text="todo.text"
+          @remove-todo="store.remove(index)"
+          @update-todo="store.update(index, todo.text)"
+        />
+      </ul>
+    </div>
   </div>
 </template>
 
 <style scoped>
-.todo-list {
+/* .todo-list {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-}
-
-h2 {
-  font-size: 2rem;
-}
+} */
 
 .btn-del {
   background-color: red;

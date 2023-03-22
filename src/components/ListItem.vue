@@ -6,18 +6,20 @@
       @click="$emit('remove-todo')"
       class="bg-red-700 text-white p-2 rounded-md"
     >
-      x
+      <TrashIcon />
     </button>
     <button
       @click="$emit('update-todo')"
       class="bg-blue-700 text-white p-2 rounded-md"
     >
-      U
+      <EditIcon />
     </button>
   </li>
 </template>
 
 <script setup lang="ts">
+import EditIcon from "./EditIcon.vue";
+import TrashIcon from "./TrashIcon.vue";
 const emit = defineEmits(["remove-todo", "update-todo"]);
 interface Props {
   done: Boolean;
