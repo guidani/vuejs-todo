@@ -5,8 +5,6 @@ import { store } from "./stores/store";
 
 const title = ref("Lista de tarefas");
 
-const newTodo = ref<string>("");
-
 const hideCompleted = ref(false);
 
 // Load todos from localStorage
@@ -23,23 +21,15 @@ const filteredTodos = computed(() => {
 
 // Watch for changes to todos and save to localStorage
 watch(
-  store.todos,
+  () => store.todos,
   () => {
     localStorage.setItem("todos", JSON.stringify(store.todos));
   },
   { deep: true }
 );
 
-const addTodo = () => {
-  const text = newTodo.value.trim();
-  if (text) {
-    store.add(text);
-    newTodo.value = "";
-  }
-};
-
 const updateTodo = (index: number, todo: string) => {
-  newTodo.value = todo;
+  store.newTodo = todo;
   store.remove(index);
 };
 </script>
@@ -48,10 +38,10 @@ const updateTodo = (index: number, todo: string) => {
   <div class="todo-list">
     <h2>{{ title }}</h2>
     <span>Criado com ajuda do ChatGPT</span>
-    <form @submit.prevent="addTodo" class="flex gap-2">
+    <form @submit.prevent="store.add()" class="flex gap-2">
       <input
         type="text"
-        v-model="newTodo"
+        v-model="store.newTodo"
         placeholder="Add a new todo..."
         class="outline-1 outline-slate-900 border pl-2 py-2"
       />
