@@ -45,7 +45,7 @@ onMounted(() => {
             type="text"
             v-model="store.newTodo"
             placeholder="Add a new todo..."
-            class="outline-1 outline-slate-900 border pl-2 py-2 flex-1"
+            class="outline-1 outline-slate-900 border pl-2 py-2 flex-1 rounded-md"
             ref="myInput"
           />
           <button
