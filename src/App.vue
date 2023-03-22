@@ -28,10 +28,10 @@ watch(
   { deep: true }
 );
 
-const updateTodo = (index: number, todo: string) => {
-  store.newTodo = todo;
-  store.remove(index);
-};
+// const updateTodo = (index: number, todo: string) => {
+//   store.newTodo = todo;
+//   store.remove(index);
+// };
 </script>
 
 <template>
@@ -64,7 +64,7 @@ const updateTodo = (index: number, todo: string) => {
         :index="index"
         :text="todo.text"
         @remove-todo="store.remove(index)"
-        @update-todo="updateTodo(index, todo.text)"
+        @update-todo="store.update(index, todo.text)"
       />
     </ul>
   </div>

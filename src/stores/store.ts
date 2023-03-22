@@ -18,4 +18,8 @@ export const store = reactive({
       this.newTodo = "";
     }
   },
+  update(index: number, todo: string){
+    this.newTodo = todo
+    this.remove(index)
+  }
 });
