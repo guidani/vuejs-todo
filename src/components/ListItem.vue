@@ -4,12 +4,11 @@
   >
     <input
       type="checkbox"
-      v-model="props.done"
       class="checked:accent-green-600 bg-gray-600"
+      v-model="isChecked"
+      @click="$emit('toggle-todo')"
     />
-    <span :class="[{ 'done': props.done }, 'flex-1']">{{
-      props.text
-    }}</span>
+    <span :class="[{ done: isChecked }, 'flex-1']">{{ text }}</span>
     <button
       @click="$emit('remove-todo')"
       class="bg-red-700 text-white p-2 rounded-md"
@@ -26,19 +25,22 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from "vue";
 import EditIcon from "./EditIcon.vue";
 import TrashIcon from "./TrashIcon.vue";
-const emit = defineEmits(["remove-todo", "update-todo"]);
+const emit = defineEmits(["remove-todo", "update-todo", "toggle-todo"]);
 interface Props {
   done: Boolean;
   text: String;
   index: Number;
 }
 const props = defineProps<Props>();
+
+const isChecked = ref(props.done);
 </script>
 
 <style scoped>
-.done{
+.done {
   text-decoration-line: line-through;
 }
 </style>

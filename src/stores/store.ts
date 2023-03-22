@@ -21,5 +21,8 @@ export const store = reactive({
   update(index: number, todo: string){
     this.newTodo = todo
     this.remove(index)
+  },
+  toggle(index: number){
+    this.todos[index].done = !this.todos[index].done;
   }
 });

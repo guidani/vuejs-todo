@@ -71,8 +71,10 @@ onMounted(() => {
           :done="todo.done"
           :index="index"
           :text="todo.text"
+          v-model="todo.done"
           @remove-todo="store.remove(index)"
           @update-todo="store.update(index, todo.text)"
+          @toggle-todo="store.toggle(index)"
         />
       </ul>
     </div>
